@@ -25,7 +25,7 @@ public class DataSeeder implements CommandLineRunner {
             return;
         }
 
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 25; i++) {
             Repuesto repuesto = new Repuesto();
             repuesto.setCodigo365("P-" + faker.number().digits(6));
             repuesto.setNombre(faker.commerce().productName());
