@@ -1,27 +1,17 @@
-# Imagen base con Maven y JDK
-FROM maven:3.8.6-openjdk-17 AS builder
-
-# Directorio de trabajo
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
 WORKDIR /app
 
-# Copiar archivos de configuración de Maven primero (para cache)
 COPY pom.xml .
 COPY src ./src
 
-# Empaquetar la aplicación
-RUN mvn clean package -DskipTests
+RUN mvn -B -DskipTests clean package
 
-# Imagen final más liviana
-FROM openjdk:17-jre-slim
-
-# Directorio de trabajo
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-# Copiar el JAR desde la fase de construcción
 COPY --from=builder /app/target/*.jar app.jar
 
-# Exponer puerto (normalmente 8080 para Spring Boot)
+ENV JAVA_OPTS=""
 EXPOSE 8080
 
-# Comando para ejecutar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
